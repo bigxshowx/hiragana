@@ -285,21 +285,23 @@ var dictionary = [
 	}
 ];
 
-var tracker = 0;
-var language = 'jap';
+var tracker;
+var language = true;
 var character;
 
-//write function to grab a hiragana elememt object to review
+//write function to grab a hiragana element object to review
 function nextHiragana(array, element){
     return array[element].jap;
 }
 
 //Toggle current from Japanese to Romanji
 function showAnswer(){
-  if ( language === 'jap' ){
+  if ( language ){
+    language = false;
     character = dictionary[tracker].roman;
     document.getElementById('title').innerHTML = character;
   } else {
+    language = true;
     character = dictionary[tracker].jap;
     document.getElementById('title').innerHTML = character;
   }
@@ -308,16 +310,20 @@ function showAnswer(){
 
 $(document).ready(function() {
 
-  $(document).on("keypress", (function(event) {
+  $(document).on("keydown", (function(event) {
 
 //add in arrows from key board to change hiragana scroll: left / right, flip: up / down
 
     if ( (event.which === 39) ) {
-        tracker++;
+        if (isNaN(tracker)) {
+            tracker = 0;
+        } else {
+            tracker++;
+        }
         character = nextHiragana(dictionary, tracker);  //Right arrow
         document.getElementById('title').innerHTML = character;
     } else if ( (event.which === 37) ){
-        tracker--;
+        if ( tracker > 0 ) tracker--;
         character = nextHiragana(dictionary, tracker);  //Left arrow
         document.getElementById('title').innerHTML = character;
     } else if ( (event.which === 38 || event.which === 40) ){
